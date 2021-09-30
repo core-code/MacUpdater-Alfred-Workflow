@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'pathname'
+require 'open3'
+
+# Helpers
+def get_env(variable:, default:, as_bool: false, as_pathname: false, match_list: [])
+  # If boolean, return early
+  if as_bool
+    case variable
+    when true, 'true', 'yes', 1, '1' then return true
+    when false, 'false', 'no', 0, '0' then return false
+    when nil, ''
+      return default if [true, false].include?(default)
+      raise ArgumentError, '"as_bool" is set but variable is nil/empty and "default" is not a boolean'
+    else raise ArgumentError, "Invalid value: #{variable.inspect}"
+    end
+  end
+
+  # Extract string
+  var_as_string = lambda {
+    return default if variable.nil? || variable.empty?
+    return variable if match_list.empty? || match_list.include?(variable)
+
+    default
+  }.call
+
+  # If pathname, make it now
+  return Pathname.new(var_as_string).expand_path if as_pathname
+
+  var_as_string
+end
+
+def get_outdated(mu_cli, hide_non_updatable)
+  all = JSON.parse(Open3.capture2(mu_cli.to_path, 'list', '--json', '--hide-uptodate-apps').first)['apps']
+
+  return all.select { |app| app['auto_updatable'] } if hide_non_updatable
+
+  all
+end
+
+def update_app(app_path, mu_cli, flags)
+  system(mu_cli.to_path, 'update', *flags, app_path)
+end
+
+# Constants
+Update_options = get_env(variable: ENV['update_options'], default: '').split(' ')
+Hide_non_updatable = get_env(variable: ENV['hide_non_automatic'], default: true, as_bool: true)
+
+Macupdater_cli = Pathname.new(
+  Open3.capture2(
+    '/usr/bin/mdfind', 'kMDItemCFBundleIdentifier', '=', 'com.corecode.MacUpdater'
+  ).first.split("\n").first
+).join('Contents/Resources/macupdater_client')
+
+# Main
+abort 'Wrong argument given! Valid arguments are "show_outdated", "update_all", or a path.' if ARGV.empty? || ARGV[1]
+
+if ARGV[0] == 'show_outdated'
+  script_filter_items = []
+
+  Outdated = get_outdated(Macupdater_cli, Hide_non_updatable)
+
+  if Outdated.empty?
+    puts({ items: [{ title: 'Everything is up-to-date!', valid: false }] }.to_json)
+    exit 0
+  end
+
+  script_filter_items.push(
+    title: 'Update All',
+    arg: 'update_all'
+  )
+
+  Outdated.each do |app|
+    script_filter_items.push(
+      title: app['name'],
+      subtitle: "#{app['installed_version']} → #{app['newest_version']}",
+      icon: { type: 'fileicon', path: app['installed_path'] },
+      valid: app['auto_updatable'],
+      arg: app['installed_path']
+    )
+  end
+
+  puts({ items: script_filter_items }.to_json)
+  exit 0
+end
+
+if ARGV[0] == 'update_all'
+  get_outdated(Macupdater_cli, true).map { |app| app['installed_path'] }.each do |app_path|
+    update_app(app_path, Macupdater_cli, Update_options)
+  end
+
+  exit 0
+end
+
+update_app(ARGV[0], Macupdater_cli, Update_options)
