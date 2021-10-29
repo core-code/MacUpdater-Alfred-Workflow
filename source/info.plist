@@ -437,7 +437,7 @@ Workflow Environment Variables:
 		<string></string>
 	</dict>
 	<key>version</key>
-	<string>2021.1</string>
+	<string>2021.2</string>
 	<key>webaddress</key>
 	<string>https://corecode.io/macupdater/</string>
 </dict>

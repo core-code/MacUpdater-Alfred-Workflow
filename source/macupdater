@@ -33,8 +33,19 @@ def get_env(variable:, default:, as_bool: false, as_pathname: false, match_list:
 end
 
 def get_outdated(mu_cli, hide_non_updatable)
-  all = JSON.parse(Open3.capture2(mu_cli.to_path, 'list', '--json', '--hide-uptodate-apps').first)['apps']
+  command = Open3.capture2(mu_cli.to_path, 'list', '--json', '--hide-uptodate-apps')
 
+  if command[1].exitstatus == 255
+    puts({ items: [{
+      title: 'Requires MacUpdater Pro or Business License',
+      subtitle: 'This Workflow depends on the command-line tool, not available in Standard',
+      valid: false
+    }] }.to_json)
+
+    exit 1
+  end
+
+  all = JSON.parse(command.first)['apps']
   return all.select { |app| app['auto_updatable'] } if hide_non_updatable
 
   all
