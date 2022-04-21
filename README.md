@@ -13,7 +13,7 @@ Workflow Environment Variables:
 
 ## Requirements
 
-* MacUpdater Pro Edition.
+* MacUpdater Pro or Business Edition.
 * Alfred PowerPack.
 
 ## Download
