@@ -1,108 +1,91 @@
-#!/usr/bin/env ruby
+#!/usr/bin/osascript -l JavaScript
 
-require 'json'
-require 'pathname'
-require 'open3'
+ObjC.import("stdlib")
 
-# Helpers
-def get_env(variable:, default:, as_bool: false, as_pathname: false, match_list: [])
-  # If boolean, return early
-  if as_bool
-    case variable
-    when true, 'true', 'yes', 1, '1' then return true
-    when false, 'false', 'no', 0, '0' then return false
-    when nil, ''
-      return default if [true, false].include?(default)
-      raise ArgumentError, '"as_bool" is set but variable is nil/empty and "default" is not a boolean'
-    else raise ArgumentError, "Invalid value: #{variable.inspect}"
-    end
-  end
+// String -> String
+function envVar(varName) {
+  return $.NSProcessInfo.processInfo.environment.objectForKey(varName).js
+}
 
-  # Extract string
-  var_as_string = lambda {
-    return default if variable.nil? || variable.empty?
-    return variable if match_list.empty? || match_list.include?(variable)
+// [String] -> Object
+function runCommand(arguments) {
+  const task = $.NSTask.alloc.init
+  const stdout = $.NSPipe.pipe
 
-    default
-  }.call
+  task.executableURL = $.NSURL.alloc.initFileURLWithPath(arguments[0])
+  task.arguments = arguments.slice(1)
+  task.standardOutput = stdout
+  task.launchAndReturnError(false)
 
-  # If pathname, make it now
-  return Pathname.new(var_as_string).expand_path if as_pathname
+  const dataOut = stdout.fileHandleForReading.readDataToEndOfFile
+  const stringOut = $.NSString.alloc.initWithDataEncoding(dataOut, $.NSUTF8StringEncoding).js
 
-  var_as_string
-end
+  return { stdout: stringOut, exitStatus: task.terminationStatus }
+}
 
-def get_outdated(mu_cli, hide_non_updatable)
-  command = Open3.capture2(mu_cli.to_path, 'list', '--json', '--hide-uptodate-apps')
+// String, String -> [Object]
+function getOutdated(muCLI, hideNonUpdatable) {
+  const command = runCommand([muCLI, "list", "--json", "--hide-uptodate-apps"])
 
-  if command[1].exitstatus == 255
-    puts({ items: [{
-      title: 'Requires MacUpdater Pro or Business License',
-      subtitle: 'This Workflow depends on the command-line tool, not available in Standard',
-      valid: false
-    }] }.to_json)
+  if (command.exitStatus === 255) return [{ suitableLicense: false }]
 
-    exit 1
-  end
+  const all = JSON.parse(command.stdout)["apps"]
 
-  all = JSON.parse(command.first)['apps']
-  return all.select { |app| app['auto_updatable'] } if hide_non_updatable
+  if (hideNonUpdatable) return all.filter(app => app["auto_updatable"])
 
-  all
-end
+  return all
+}
 
-def update_app(app_path, mu_cli, flags)
-  system(mu_cli.to_path, 'update', *flags, app_path)
-end
+// String, [String], String -> ()
+function updateApp(muCLI, flags, appPath) {
+  runCommand([muCLI, "update", flags, appPath].flat())
+}
 
-# Constants
-Update_options = get_env(variable: ENV['update_options'], default: '').split(' ')
-Hide_non_updatable = get_env(variable: ENV['hide_non_automatic'], default: true, as_bool: true)
+// Constants
+const muCLI = runCommand(["/usr/bin/mdfind", "kMDItemCFBundleIdentifier", "=", "com.corecode.MacUpdater"]).stdout.trim() + "/Contents/Resources/macupdater_client"
+const updateOptions = envVar("update_options")?.split(" ").filter(opt => opt) || []
+const hideNonUpdatable = !(envVar("hide_non_automatic") === "false")
 
-Macupdater_cli = Pathname.new(
-  Open3.capture2(
-    '/usr/bin/mdfind', 'kMDItemCFBundleIdentifier', '=', 'com.corecode.MacUpdater'
-  ).first.split("\n").first
-).join('Contents/Resources/macupdater_client')
+// Main
+function run(argv) {
+  switch (argv[0]) {
+    case "show_outdated":
+      const outdated = getOutdated(muCLI, hideNonUpdatable)
 
-# Main
-abort 'Wrong argument given! Valid arguments are "show_outdated", "update_all", or a path.' if ARGV.empty? || ARGV[1]
+      // Check for suitable license
+      if (outdated[0]?.["unsuitableLicense"]) {
+        return JSON.stringify({ items : [{
+          title: "Requires MacUpdater Pro or Business License",
+          subtitle: "This Workflow depends on the command-line tool, not available in Standard",
+          valid: false
+        }]})
+      }
 
-if ARGV[0] == 'show_outdated'
-  script_filter_items = []
+      // Check if there is anything to update
+      if (outdated.length === 0) {
+        return JSON.stringify({ items: [{ title: "Everything is up-to-date!", valid: false }] })
+      }
 
-  Outdated = get_outdated(Macupdater_cli, Hide_non_updatable)
+      // Show outdated
+      const firstItem = {
+        title: "Update All",
+        arg: "update_all"
+      }
 
-  if Outdated.empty?
-    puts({ items: [{ title: 'Everything is up-to-date!', valid: false }] }.to_json)
-    exit 0
-  end
+      const items = outdated.map(app => {
+        return {
+          title: app["name"],
+          subtitle: `${app["installed_version"]} → ${app["newest_version"]}`,
+          icon: { type: 'fileicon', path: app["installed_path"] },
+          valid: app["auto_updatable"],
+          arg: app["installed_path"]
+        }
+      })
 
-  script_filter_items.push(
-    title: 'Update All',
-    arg: 'update_all'
-  )
-
-  Outdated.each do |app|
-    script_filter_items.push(
-      title: app['name'],
-      subtitle: "#{app['installed_version']} → #{app['newest_version']}",
-      icon: { type: 'fileicon', path: app['installed_path'] },
-      valid: app['auto_updatable'],
-      arg: app['installed_path']
-    )
-  end
-
-  puts({ items: script_filter_items }.to_json)
-  exit 0
-end
-
-if ARGV[0] == 'update_all'
-  get_outdated(Macupdater_cli, true).map { |app| app['installed_path'] }.each do |app_path|
-    update_app(app_path, Macupdater_cli, Update_options)
-  end
-
-  exit 0
-end
-
-update_app(ARGV[0], Macupdater_cli, Update_options)
+      return JSON.stringify({ items: [firstItem, items].flat() })
+    case "update_all":
+      return getOutdated(muCLI, true).map(app => app["installed_path"]).forEach(appPath => updateApp(muCLI, updateOptions, appPath))
+    default:
+      return updateApp(muCLI, updateOptions, argv[0])
+  }
+}
