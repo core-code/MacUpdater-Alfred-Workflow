@@ -44,7 +44,7 @@ function updateApp(muCLI, flags, appPath) {
 // Constants
 const muCLI = runCommand(["/usr/bin/mdfind", "kMDItemCFBundleIdentifier", "=", "com.corecode.MacUpdater"]).stdout.trim() + "/Contents/Resources/macupdater_client"
 const updateOptions = envVar("update_options")?.split(" ").filter(opt => opt) || []
-const hideNonUpdatable = !(envVar("hide_non_automatic") === "false")
+const hideNonUpdatable = !(envVar("hide_non_automatic") === "0")
 
 // Main
 function run(argv) {

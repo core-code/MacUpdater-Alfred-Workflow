@@ -127,13 +127,85 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>mupdater</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Grabbing outdated apps…</string>
+				<key>script</key>
+				<string>./macupdater 'show_outdated'</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>macupdater.rb</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Update with Macupdater</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>E8273CDA-08EB-42B6-9760-4BAE1DD140F6</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./macupdater 'update_all'</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
 				<string># THESE VARIABLES MUST BE SET. SEE THE ONEUPDATER README FOR AN EXPLANATION OF EACH.
-readonly remote_info_plist="https://raw.githubusercontent.com/core-code/macupdater-alfred-workflow/master/source/info.plist"
+readonly remote_info_plist="https://raw.githubusercontent.com/core-code/macupdater-alfred-workflow/master/Workflow/info.plist"
 readonly workflow_url="core-code/macupdater-alfred-workflow"
 readonly download_type='github_release'
 readonly frequency_check='4'
@@ -218,78 +290,6 @@ fi</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
-				<true/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>keyword</key>
-				<string>mupdater</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Grabbing outdated apps…</string>
-				<key>script</key>
-				<string>./macupdater 'show_outdated'</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>macupdater.rb</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>Update with Macupdater</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>E8273CDA-08EB-42B6-9760-4BAE1DD140F6</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>./macupdater 'update_all'</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>5</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -309,6 +309,8 @@ fi</string>
 				</array>
 				<key>elselabel</key>
 				<string>Update One</string>
+				<key>hideelse</key>
+				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.utility.conditional</string>
@@ -365,22 +367,17 @@ fi</string>
 	<key>readme</key>
 	<string>Official [MacUpdater](https://www.corecode.io/macupdater/) Pro Alfred Workflow to keep your software effortlessly up-to-date. Call `mupdater` to see a list of your outdated software:
 
-![](https://user-images.githubusercontent.com/1699443/135493185-0c83fe94-a11e-48dc-b71b-7a97cba389d7.png)
+![Alfred search for mupdater](images/about/mupdater.png)
 
-Action any item to start updating it, or the first one to update everything.
-
-Workflow Environment Variables:
-
-* `hide_non_automatic`: unless set to `false`, software which cannot yet be auto-updated by MacUpdater (and thus this Workflow) will be hidden.
-* `update_options`: takes specific flags to be passed on update, separated by spaces. For a list of available options, see `MacUpdater.app/Contents/Resources/macupdater_client --help`.</string>
+Action any item to start updating it, or the first one to update everything.</string>
 	<key>uidata</key>
 	<dict>
 		<key>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</key>
 		<dict>
 			<key>xpos</key>
-			<integer>415</integer>
+			<real>415</real>
 			<key>ypos</key>
-			<integer>175</integer>
+			<real>175</real>
 		</dict>
 		<key>1CF79B66-1F61-40F2-A272-D40D7AD1B9FC</key>
 		<dict>
@@ -389,55 +386,94 @@ Workflow Environment Variables:
 			<key>note</key>
 			<string>OneUpdater</string>
 			<key>xpos</key>
-			<integer>625</integer>
+			<real>625</real>
 			<key>ypos</key>
-			<integer>175</integer>
+			<real>175</real>
 		</dict>
 		<key>4C49741F-2105-434A-80E3-9E73AA0ABC15</key>
 		<dict>
 			<key>xpos</key>
-			<integer>220</integer>
+			<real>220</real>
 			<key>ypos</key>
-			<integer>195</integer>
+			<real>195</real>
 		</dict>
 		<key>72D4BAA5-C3C1-4086-BCEA-6EADC0CA60FF</key>
 		<dict>
 			<key>xpos</key>
-			<integer>415</integer>
+			<real>415</real>
 			<key>ypos</key>
-			<integer>40</integer>
+			<real>40</real>
 		</dict>
 		<key>B2C394EE-619A-49A0-9969-0A540D60F625</key>
 		<dict>
 			<key>xpos</key>
-			<integer>415</integer>
+			<real>415</real>
 			<key>ypos</key>
-			<integer>450</integer>
+			<real>450</real>
 		</dict>
 		<key>C21EB5C4-3EE9-468C-9BE6-50CCC90821A9</key>
 		<dict>
 			<key>xpos</key>
-			<integer>415</integer>
+			<real>415</real>
 			<key>ypos</key>
-			<integer>310</integer>
+			<real>310</real>
 		</dict>
 		<key>E8273CDA-08EB-42B6-9760-4BAE1DD140F6</key>
 		<dict>
 			<key>xpos</key>
-			<integer>40</integer>
+			<real>40</real>
 			<key>ypos</key>
-			<integer>175</integer>
+			<real>175</real>
 		</dict>
 	</dict>
-	<key>variables</key>
-	<dict>
-		<key>hide_non_automatic</key>
-		<string>true</string>
-		<key>update_options</key>
-		<string></string>
-	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Do not show software which cannot be auto-updated</string>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>Hide Manual Updates</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>hide_non_automatic</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Space-separated list. For all available options, run:
+MacUpdater.app/Contents/Resources/macupdater_client</string>
+			<key>label</key>
+			<string>Update Options</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>update_options</string>
+		</dict>
+	</array>
+	<key>variablesdontexport</key>
+	<array/>
 	<key>version</key>
-	<string>2022.1</string>
+	<string>2022.2</string>
 	<key>webaddress</key>
 	<string>https://corecode.io/macupdater/</string>
 </dict>
