@@ -1,10 +1,10 @@
 # MacUpdater Alfred Workflow
 
-Official [MacUpdater](https://www.corecode.io/macupdater/) Pro Alfred Workflow to keep your software effortlessly up-to-date. Call `mupdater` to see a list of your outdated software:
+Official [MacUpdater](https://www.corecode.io/macupdater/) Alfred Workflow to keep your software effortlessly up-to-date.
+
+Run the Keyword (default: `mupdater`) to see a list of outdated software. Press <kbd>⏎</kbd> to update.
 
 ![Alfred search for mupdater](source/images/about/mupdater.png)
-
-Action any item to start updating it, or the first one to update everything.
 
 ## Requirements
 

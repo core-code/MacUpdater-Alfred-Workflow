@@ -140,7 +140,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>mupdater</string>
+				<string>{var:check_keyword}</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -205,7 +205,7 @@
 				<integer>0</integer>
 				<key>script</key>
 				<string># THESE VARIABLES MUST BE SET. SEE THE ONEUPDATER README FOR AN EXPLANATION OF EACH.
-readonly remote_info_plist="https://raw.githubusercontent.com/core-code/macupdater-alfred-workflow/master/Workflow/info.plist"
+readonly remote_info_plist="https://raw.githubusercontent.com/core-code/macupdater-alfred-workflow/master/source/info.plist"
 readonly workflow_url="core-code/macupdater-alfred-workflow"
 readonly download_type='github_release'
 readonly frequency_check='4'
@@ -365,11 +365,15 @@ fi</string>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Official [MacUpdater](https://www.corecode.io/macupdater/) Pro Alfred Workflow to keep your software effortlessly up-to-date. Call `mupdater` to see a list of your outdated software:
+	<string>## Setup
 
-![Alfred search for mupdater](images/about/mupdater.png)
+Install [MacUpdater](https://www.corecode.io/macupdater/). A Pro or Business license is required.
 
-Action any item to start updating it, or the first one to update everything.</string>
+## Usage
+
+Run the Keyword (default: `mupdater`) to see a list of outdated software. Press ↩ to update.
+
+![Alfred search for mupdater](images/about/mupdater.png)</string>
 	<key>uidata</key>
 	<dict>
 		<key>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</key>
@@ -432,6 +436,27 @@ Action any item to start updating it, or the first one to update everything.</st
 			<key>config</key>
 			<dict>
 				<key>default</key>
+				<string>mupdate</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>Keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>check_keyword</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
 				<true/>
 				<key>required</key>
 				<false/>
@@ -470,11 +495,9 @@ MacUpdater.app/Contents/Resources/macupdater_client</string>
 			<string>update_options</string>
 		</dict>
 	</array>
-	<key>variablesdontexport</key>
-	<array/>
 	<key>version</key>
-	<string>2022.2</string>
+	<string>2022.3</string>
 	<key>webaddress</key>
-	<string>https://corecode.io/macupdater/</string>
+	<string>https://github.com/core-code/MacUpdater-Alfred-Workflow/</string>
 </dict>
 </plist>
