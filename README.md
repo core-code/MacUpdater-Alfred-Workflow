@@ -13,7 +13,7 @@ Run the Keyword (default: `mupdater`) to see a list of outdated software. Press 
 
 ## Download (for Alfred 5)
 
-[Get the latest release.](https://github.com/core-code/macupdater-alfred-workflow/releases/latest/download/MacUpdater.alfredworkflow)
+[Install from the Alfred Gallery.](https://alfred.app/workflows/corecode/macupdater/)
 
 ## Download (for Alfred 4)
 
