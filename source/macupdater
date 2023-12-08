@@ -27,7 +27,7 @@ function runCommand(arguments) {
 function getOutdated(muCLI, hideNonUpdatable) {
   const command = runCommand([muCLI, "list", "--json", "--hide-uptodate-apps"])
 
-  if (command.exitStatus === 255) return [{ suitableLicense: false }]
+  if (command.exitStatus === 255) return [{ unsuitableLicense: true }]
 
   const all = JSON.parse(command.stdout)["apps"]
 
