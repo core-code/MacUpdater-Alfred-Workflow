@@ -105,6 +105,29 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./macupdater 'update_all'</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -154,29 +177,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>./macupdater 'update_all'</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>5</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>0B0C79ED-3530-44DE-98E2-EA1585BFB1D1</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -220,7 +220,7 @@
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>5</integer>
+				<integer>11</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -333,12 +333,12 @@ Run the Keyword (default: `mupdater`) to see a list of outdated software. Press 
 				<key>required</key>
 				<false/>
 				<key>text</key>
-				<string>Do not show software which cannot be auto-updated</string>
+				<string>Hide software which cannot be auto-updated</string>
 			</dict>
 			<key>description</key>
 			<string></string>
 			<key>label</key>
-			<string>Hide Manual Updates</string>
+			<string>Visibility</string>
 			<key>type</key>
 			<string>checkbox</string>
 			<key>variable</key>
@@ -360,7 +360,7 @@ Run the Keyword (default: `mupdater`) to see a list of outdated software. Press 
 			<string>Space-separated list. For all available options, run:
 MacUpdater.app/Contents/Resources/macupdater_client</string>
 			<key>label</key>
-			<string>Update Options</string>
+			<string>Options</string>
 			<key>type</key>
 			<string>textfield</string>
 			<key>variable</key>
@@ -368,7 +368,7 @@ MacUpdater.app/Contents/Resources/macupdater_client</string>
 		</dict>
 	</array>
 	<key>version</key>
-	<string>2022.4</string>
+	<string>2023.1</string>
 	<key>webaddress</key>
 	<string>https://github.com/core-code/MacUpdater-Alfred-Workflow/</string>
 </dict>
